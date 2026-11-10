@@ -2,5 +2,7 @@
   "name": "Invitación 15 Años Ana Sofía - Rapunzel",
   "description": "Invitación digital interactiva para los 15 Años de Ana Sofía con temática mágica de Rapunzel, linternas flotantes, reproductor musical con Web Audio API, galería, cuenta regresiva, mapa interactivo y confirmación RSVP.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
