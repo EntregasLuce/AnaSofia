@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-script: "Great Vibes", cursive;
+  --font-royal: "Cinzel Decorative", "Cinzel", serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Montserrat", sans-serif;
+
+  --color-rapunzel-dark: #0b0312;
+  --color-rapunzel-surface: #140721;
+  --color-rapunzel-card: #1e0b2e;
+  --color-rapunzel-purple: #2a0d36;
+  --color-rapunzel-violet: #582167;
+  --color-rapunzel-lila: #b279a7;
+  --color-rapunzel-soft-lila: #e8d2e6;
+  --color-rapunzel-light: #fcf8f7;
+  --color-rapunzel-gold: #dfb743;
+  --color-rapunzel-gold-light: #f6ebbd;
+  --color-rapunzel-gold-dark: #997819;
+  --color-rapunzel-amber: #e59834;
+}
+
+/* Custom Gold Gradient Text */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #fff7d6 0%, #f6ebbd 20%, #dfb743 60%, #b88f28 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-subtle {
+  background: linear-gradient(135deg, #f6ebbd 0%, #dfb743 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 16px rgba(223, 183, 67, 0.45), 0 0 32px rgba(223, 183, 67, 0.25);
+}
+
+.lila-text-glow {
+  text-shadow: 0 0 18px rgba(178, 121, 167, 0.55), 0 0 36px rgba(88, 33, 103, 0.35);
+}
+
+/* Filigree Central Divider */
+.central-divider {
+  position: relative;
+}
+.central-divider::before {
+  content: '✦  ❖  ✦';
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: #dfb743;
+  letter-spacing: 0.35em;
+  opacity: 0.75;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.central-divider::after {
+  content: '';
+  display: block;
+  width: 65%;
+  height: 1px;
+  margin: 0 auto 2rem auto;
+  background: linear-gradient(90deg, transparent 0%, rgba(223, 183, 67, 0.6) 50%, transparent 100%);
+}
+
+/* Lantern Canvas Background */
+#lanternsCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Interactive touch hint ripple */
+@keyframes touchPulse {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.animate-touch-pulse {
+  animation: touchPulse 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Audio wave equalizer bars */
+@keyframes barBounce1 {
+  0%, 100% { height: 4px; }
+  50% { height: 18px; }
+}
+@keyframes barBounce2 {
+  0%, 100% { height: 16px; }
+  50% { height: 6px; }
+}
+@keyframes barBounce3 {
+  0%, 100% { height: 8px; }
+  50% { height: 22px; }
+}
+
+.bar-anim-1 { animation: barBounce1 0.85s ease-in-out infinite; }
+.bar-anim-2 { animation: barBounce2 0.7s ease-in-out infinite 0.2s; }
+.bar-anim-3 { animation: barBounce3 0.95s ease-in-out infinite 0.4s; }
+
+/* Glowing frame pulse */
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(223, 183, 67, 0.25), 0 0 35px rgba(42, 13, 54, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(223, 183, 67, 0.45), 0 0 50px rgba(88, 33, 103, 0.9);
+  }
+}
+
+.card-gold-glow {
+  animation: goldPulse 4s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0312;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a0d36;
+  border-radius: 9999px;
+  border: 1px solid rgba(223, 183, 67, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #582167;
+}

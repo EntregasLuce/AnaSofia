@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis 15 Años - Ana Sofía | Invitación Digital</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@600;700;900&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rapunzel: {
+                            dark: '#12061c',
+                            purple: '#2a0d36',
+                            violet: '#582167',
+                            lila: '#b279a7',
+                            softLila: '#e8d2e6',
+                            light: '#fcf8f7',
+                            gold: '#dfb743',
+                            goldLight: '#f6ebbd',
+                            goldDark: '#997819'
+                        }
+                    },
+                    fontFamily: {
+                        script: ['"Great Vibes"', 'cursive'],
+                        serifTitle: ['"Cinzel Decorative"', 'serif'],
+                        serifBody: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0312;
+            font-family: 'Montserrat', sans-serif;
+            color: #fcf8f7;
+            overflow-x: hidden;
+        }
+
+        /* Canvas de linternas flotantes en fondo */
+        #lanternsCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Texto Dorado Gradiente y Brillo */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #f6ebbd 0%, #dfb743 50%, #997819 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-text-glow {
+            text-shadow: 0 0 15px rgba(223, 183, 67, 0.4), 0 0 30px rgba(223, 183, 67, 0.2);
+        }
+
+        /* Divisiones centrales en filigrana en lugar de marcos completos */
+        .central-divider {
+            position: relative;
+        }
+        .central-divider::after {
+            content: '';
+            display: block;
+            width: 60%;
+            height: 1px;
+            margin: 2.5rem auto 1.5rem auto;
+            background: linear-gradient(90deg, transparent 0%, #dfb743 50%, transparent 100%);
+            opacity: 0.5;
+        }
+
+        /* Marco Ovalado Elegante */
+        .oval-hero-frame {
+            border-radius: 50% 50% 48% 48% / 40% 40% 50% 50%;
+            border: 2px solid #dfb743;
+            box-shadow: 0 0 25px rgba(223, 183, 67, 0.3);
+        }
+
+        /* Animación pulso suave para linternas */
+        @keyframes floatGlow {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+            50% { transform: translateY(-8px) scale(1.04); opacity: 1; }
+        }
+
+        .animate-float-glow {
+            animation: floatGlow 4s ease-in-out infinite;
+        }
+
+        /* Botón de música pulsante */
+        @keyframes musicPulse {
+            0% { box-shadow: 0 0 0 0 rgba(223, 183, 67, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(223, 183, 67, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(223, 183, 67, 0); }
+        }
+
+        .music-btn-pulse {
+            animation: musicPulse 2s infinite;
+        }
+
+        /* Transición de fundido para el carrusel de portada */
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-slide.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center items-center p-0 sm:p-4">
+
+    <!-- Canvas para Linternas Flotantes de Rapunzel -->
+    <canvas id="lanternsCanvas"></canvas>
+
+    <!-- Botón Flotante Reproductor de Música Mágica -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="musicToggle" class="w-12 h-12 rounded-full bg-gradient-to-r from-rapunzel-gold via-amber-300 to-rapunzel-gold text-rapunzel-dark flex items-center justify-center shadow-2xl music-btn-pulse border-2 border-rapunzel-goldLight transition-all transform active:scale-95 hover:scale-105">
+            <i id="musicIcon" class="fas fa-music text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Contenedor Estilo Invitación Digital Móvil -->
+    <main class="w-full max-w-md bg-rapunzel-dark/95 min-h-screen sm:min-h-0 sm:rounded-[36px] sm:my-4 border-0 sm:border border-rapunzel-gold/30 shadow-[0_0_50px_rgba(42,13,54,0.8)] overflow-hidden relative z-10 flex flex-col">
+        
+        <!-- HEADER / PORTADA CON CARRUSEL DE FOTOS CLOUDINARY Y OVERLAY DE FECHA/HORA -->
+        <header class="relative w-full h-[540px] flex flex-col justify-between text-center overflow-hidden">
+            
+            <!-- Contenedor de Slideshow Cloudinary con imágenes directas y fallbacks robustos -->
+            <div id="heroSlideshow" class="absolute inset-0 z-0">
+                <div class="hero-slide active" style="background-image: url('15_AnaSofia_38_2.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('15_AnaSofia_31.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('15_AnaSofia_38.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('Hoy creamos un look mágico de Rapunzel para su sesión de fotos de 15 años..💜Con tonos moraditos-3.jpg');"></div>
+            </div>
+
+            <!-- Máscara de Gradiente Oscuro y Fundido (Fade) hacia el fondo inferior -->
+            <div class="absolute inset-0 bg-gradient-to-t from-rapunzel-dark via-rapunzel-dark/30 to-rapunzel-dark/70 z-10"></div>
+
+            <!-- Contenido Superior Overlay -->
+            <div class="relative z-20 pt-8 px-6">
+                <p class="font-sans text-[11px] tracking-[0.35em] uppercase text-rapunzel-goldLight mb-1 drop-shadow">Mis 15 Años</p>
+                <h1 class="font-script text-5xl sm:text-6xl text-rapunzel-softLila drop-shadow-[0_2px_15px_rgba(178,121,167,0.8)] my-1">
+                    Ana Sofía
+                </h1>
+            </div>
+
+            <!-- Contenido Inferior Overlay: Fecha, Hora y Cita (SIN MARCO ALREDEDOR) -->
+            <div class="relative z-20 pb-6 px-6 text-center">
+                <div class="py-2 px-2 text-center mb-2">
+                    <p class="font-serifTitle text-xs text-rapunzel-goldLight uppercase tracking-widest mb-1 drop-shadow">Sábado</p>
+                    <p class="font-serifTitle text-4xl sm:text-5xl font-extrabold text-rapunzel-gold gold-gradient-text gold-text-glow leading-tight">
+                        12 • DICIEMBRE • 2026
+                    </p>
+                    <div class="mt-2 flex items-center justify-center gap-2">
+                        <i class="far fa-clock text-rapunzel-gold text-lg"></i>
+                        <span class="font-serifTitle text-2xl font-bold text-white tracking-widest drop-shadow">7:00 PM</span>
+                    </div>
+                </div>
+
+                <p class="font-serifBody italic text-xs text-rapunzel-softLila/95 text-center leading-relaxed drop-shadow max-w-xs mx-auto">
+                    "Hoy dejo atrás mi niñez para comenzar un nuevo capítulo, rodeada del amor de quienes más quiero."
+                </p>
+            </div>
+
+        </header>
+
+        <!-- SECCIÓN DE CONTADOR REGRESIVO -->
+        <section class="px-6 py-6 text-center">
+            <h3 class="font-serifTitle text-xs text-rapunzel-gold tracking-[0.25em] uppercase mb-4">Cada Vez Falta Menos</h3>
+            
+            <div id="countdown" class="grid grid-cols-4 gap-2 px-2">
+                <div class="flex flex-col py-3 px-1 bg-rapunzel-purple/30 rounded-xl border border-rapunzel-gold/20">
+                    <span id="days" class="font-serifTitle text-2xl text-rapunzel-gold gold-gradient-text font-bold">00</span>
+                    <span class="text-[9px] text-rapunzel-softLila uppercase tracking-wider mt-1">Días</span>
+                </div>
+                <div class="flex flex-col py-3 px-1 bg-rapunzel-purple/30 rounded-xl border border-rapunzel-gold/20">
+                    <span id="hours" class="font-serifTitle text-2xl text-rapunzel-gold gold-gradient-text font-bold">00</span>
+                    <span class="text-[9px] text-rapunzel-softLila uppercase tracking-wider mt-1">Horas</span>
+                </div>
+                <div class="flex flex-col py-3 px-1 bg-rapunzel-purple/30 rounded-xl border border-rapunzel-gold/20">
+                    <span id="minutes" class="font-serifTitle text-2xl text-rapunzel-gold gold-gradient-text font-bold">00</span>
+                    <span class="text-[9px] text-rapunzel-softLila uppercase tracking-wider mt-1">Min</span>
+                </div>
+                <div class="flex flex-col py-3 px-1 bg-rapunzel-purple/30 rounded-xl border border-rapunzel-gold/20">
+                    <span id="seconds" class="font-serifTitle text-2xl text-rapunzel-gold gold-gradient-text font-bold">00</span>
+                    <span class="text-[9px] text-rapunzel-softLila uppercase tracking-wider mt-1">Seg</span>
+                </div>
+            </div>
+
+            <div class="w-full central-divider"></div>
+        </section>
+
+        <!-- NUEVA SECCIÓN DE DEDICATORIA A LA MAMÁ Y FAMILIARES -->
+        <section class="px-6 py-4 text-center">
+            <i class="fas fa-heart text-2xl text-rapunzel-lila mb-2 animate-pulse"></i>
+            <h3 class="font-serifTitle text-xs text-rapunzel-gold tracking-[0.25em] uppercase mb-2">Con Especial Agradecimiento</h3>
+            <p class="font-script text-3xl text-rapunzel-softLila mb-3">A mi Madre y Familia</p>
+            <p class="font-serifBody text-sm text-rapunzel-light leading-relaxed italic px-2">
+                "A mi mamá <span class="font-bold text-rapunzel-goldLight underline decoration-rapunzel-gold/40">Ruth Gallego</span> y a mis familiares, por su amor incondicional, su guía constante y por brindarle a Ana Sofía todas las herramientas y valores para florecer y vivir esta hermosa etapa de su vida."
+            </p>
+
+            <div class="w-full central-divider"></div>
+        </section>
+
+        <!-- SECCIÓN DE GALERÍA DE FOTOS -->
+        <section class="px-6 py-4 text-center">
+            <h3 class="font-serifTitle text-xs text-rapunzel-gold tracking-[0.25em] uppercase mb-2">Galería Mágica</h3>
+            <p class="font-script text-2xl text-rapunzel-softLila mb-4">Recuerdos inolvidables</p>
+
+            <div id="cloudinaryGallery" class="grid grid-cols-2 gap-3">
+                <div class="relative h-44 rounded-2xl overflow-hidden border border-rapunzel-gold/30 shadow-md cursor-pointer group" onclick="openLightbox('15_AnaSofia_31.jpg')">
+                    <img src="15_AnaSofia_31.jpg" 
+                         alt="Ana Sofia XV Foto 1" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x550/2a0d36/dfb743?text=Ana+Sofia+1';" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-rapunzel-dark/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
+                        <i class="fas fa-search-plus text-rapunzel-gold text-lg"></i>
+                    </div>
+                </div>
+
+                <div class="relative h-44 rounded-2xl overflow-hidden border border-rapunzel-gold/30 shadow-md cursor-pointer group" onclick="openLightbox('15_AnaSofia_38.jpg')">
+                    <img src="15_AnaSofia_38.jpg" 
+                         alt="Ana Sofia XV Foto 2" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x550/2a0d36/dfb743?text=Ana+Sofia+2';" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-rapunzel-dark/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
+                        <i class="fas fa-search-plus text-rapunzel-gold text-lg"></i>
+                    </div>
+                </div>
+
+                <div class="relative h-44 rounded-2xl overflow-hidden border border-rapunzel-gold/30 shadow-md cursor-pointer group" onclick="openLightbox('Hoy creamos un look mágico de Rapunzel para su sesión de fotos de 15 años..💜Con tonos moraditos-3.jpg')">
+                    <img src="Hoy creamos un look mágico de Rapunzel para su sesión de fotos de 15 años..💜Con tonos moraditos-3.jpg" 
+                         alt="Ana Sofia XV Foto 3" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x550/2a0d36/dfb743?text=Ana+Sofia+3';" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-rapunzel-dark/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
+                        <i class="fas fa-search-plus text-rapunzel-gold text-lg"></i>
+                    </div>
+                </div>
+
+                <div class="relative h-44 rounded-2xl overflow-hidden border border-rapunzel-gold/30 shadow-md cursor-pointer group" onclick="openLightbox('Hoy creamos un look mágico de Rapunzel para su sesión de fotos de 15 años..💜Con tonos moraditos-2.jpg')">
+                    <img src="Hoy creamos un look mágico de Rapunzel para su sesión de fotos de 15 años..💜Con tonos moraditos-2.jpg" 
+                         alt="Ana Sofia XV Foto 4" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x550/2a0d36/dfb743?text=Ana+Sofia+4';" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-rapunzel-dark/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
+                        <i class="fas fa-search-plus text-rapunzel-gold text-lg"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full central-divider"></div>
+        </section>
+
+        <!-- UBICACIÓN Y LUGAR DEL EVENTO -->
+        <section class="px-6 py-4 text-center">
+            <i class="fas fa-map-marker-alt text-2xl text-rapunzel-gold mb-2"></i>
+            <h3 class="font-serifTitle text-xs text-rapunzel-gold tracking-widest uppercase mb-1">Recepción</h3>
+            <h4 class="font-serifBody text-xl font-bold text-white mb-1">Casa Campo VILLA CRIS</h4>
+            <p class="text-xs text-rapunzel-softLila leading-relaxed">
+                Inmobiliaria cerrada Las Marías<br>
+                <span class="text-rapunzel-goldLight font-semibold">MZ 2 CASA 3</span>
+            </p>
+
+            <!-- Vista interactiva Mapa Google -->
+            <div class="mt-4 w-full h-40 rounded-2xl overflow-hidden border border-rapunzel-gold/30 relative shadow-inner">
+                <iframe 
+                    title="Ubicación del evento"
+                    class="w-full h-full filter saturate-150 contrast-125 opacity-85"
+                    src="https://maps.google.com/maps?q=Inmobiliaria+Las+Marias+Casa+Campo+Villa+Cris&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    loading="lazy"
+                    style="border:0;" 
+                    allowfullscreen="">
+                </iframe>
+            </div>
+
+            <!-- Botón de apertura en Google Maps -->
+            <a href="https://www.google.com/maps/search/?api=1&query=Inmobiliaria+cerrada+Las+Marias+Casa+Campo+VILLA+CRIS+MZ+2+CASA+3" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="mt-4 inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-rapunzel-gold via-amber-300 to-rapunzel-gold text-rapunzel-dark font-bold text-xs tracking-wider uppercase shadow-lg hover:brightness-110 transition-all transform active:scale-95">
+                <i class="fas fa-directions text-sm"></i> Abrir en Google Maps
+            </a>
+
+            <div class="w-full central-divider"></div>
+        </section>
+
+        <!-- CÓDIGO DE VESTIMENTA (DRESS CODE) -->
+        <section class="px-6 py-4 text-center">
+            <h3 class="font-serifTitle text-xs text-rapunzel-gold tracking-[0.25em] uppercase mb-4">Código de Vestimenta</h3>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="py-4 px-2 bg-rapunzel-purple/20 rounded-2xl border-t border-rapunzel-gold/20">
+                    <i class="fas fa-female text-rapunzel-lila text-2xl mb-2"></i>
+                    <p class="text-xs font-bold text-white uppercase tracking-wider">Mujeres</p>
+                    <p class="text-[11px] text-rapunzel-softLila mt-0.5">Colores Pasteles</p>
+                </div>
+                <div class="py-4 px-2 bg-rapunzel-purple/20 rounded-2xl border-t border-rapunzel-gold/20">
+                    <i class="fas fa-user-tie text-rapunzel-gold text-2xl mb-2"></i>
+                    <p class="text-xs font-bold text-white uppercase tracking-wider">Hombres</p>
+                    <p class="text-[11px] text-rapunzel-softLila mt-0.5">Traje Formal</p>
+                </div>
+            </div>
+
+            <!-- RESERVA DE COLOR LILA: PROMINENTE Y DESENCAPSULADO -->
+            <div class="py-4 px-2 text-center">
+                <p class="font-serifTitle text-xs font-bold text-rapunzel-gold uppercase tracking-[0.25em] flex items-center justify-center gap-2 mb-2">
+                    <i class="fas fa-crown text-rapunzel-gold text-sm"></i> Reserva Especial <i class="fas fa-crown text-rapunzel-gold text-sm"></i>
+                </p>
+                <h2 class="font-serifTitle text-2xl sm:text-3xl font-extrabold text-rapunzel-softLila gold-gradient-text tracking-wide uppercase my-2">
+                    Lila en todas sus tonalidades
+                </h2>
+                <p class="font-serifBody text-xs text-rapunzel-goldLight/80 italic mt-1">
+                    Reservado exclusivamente para lucimiento de la quinceañera
+                </p>
+            </div>
+
+            <div class="w-full central-divider"></div>
+        </section>
+
+        <!-- LLUVIA DE SOBRES CON TIPOGRAFÍA MÁS AMPLIA -->
+        <section class="px-6 py-4 text-center">
+            <i class="fas fa-envelope-open-text text-3xl text-rapunzel-gold mb-3"></i>
+            <h3 class="font-serifTitle text-sm text-rapunzel-gold tracking-[0.25em] uppercase mb-3">Lluvia de Sobres</h3>
+            <p class="font-serifBody text-base text-rapunzel-light leading-relaxed italic px-2">
+                "El regalo más valioso para mí es tu presencia. Pero si deseas hacerme un detalle, agradecería que fuera en efectivo a través de sobre cerrado el día del evento."
+            </p>
+
+            <div class="w-full central-divider"></div>
+        </section>
+
+        <!-- BOTÓN CONFIRMAR ASISTENCIA (RSVP) -->
+        <section class="px-6 pt-2 pb-8 text-center">
+            <a href="https://api.whatsapp.com/send?phone=&text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20los%2015%20Años%20de%20Ana%20Sofía%20🌸✨" 
+               target="_blank"
+               class="inline-flex items-center justify-center gap-3 w-full py-4 px-6 rounded-full bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 text-white font-bold text-sm tracking-wider uppercase shadow-xl hover:shadow-green-500/20 transform active:scale-95 transition-all border border-green-300/30">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <span>Confirmar Asistencia</span>
+            </a>
+            <p class="text-[10px] text-rapunzel-softLila/60 mt-2">Agradecemos tu confirmación con anticipación</p>
+        </section>
+
+        <!-- FOOTER ELEGANTE -->
+        <footer class="mt-auto py-6 px-4 bg-rapunzel-dark/90 text-center border-t border-rapunzel-gold/20">
+            <p class="font-script text-3xl text-rapunzel-gold">Ana Sofía</p>
+            <p class="text-[9px] text-rapunzel-softLila/50 uppercase tracking-[0.3em] mt-1">Mis XV Años • 12.12.2026</p>
+        </footer>
+
+    </main>
+
+    <!-- MODAL LIGHTBOX PARA LA GALERÍA -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-md" onclick="closeLightbox()">
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rapunzel-gold transition-colors" onclick="closeLightbox()">&times;</button>
+        <img id="lightboxImg" src="" alt="Foto Ampliada" class="max-w-full max-h-[85vh] rounded-xl border border-rapunzel-gold/40 shadow-2xl object-contain">
+    </div>
+
+    <!-- SCRIPT DE ANIMACIONES, LIGHTBOX, CARRUSEL DE PORTADA Y MÚSICA -->
+    <script>
+        /* -------------------------------------------------------------
+           1. CARRUSEL / SLIDESHOW DE PORTADA (CROSSFADE)
+        ------------------------------------------------------------- */
+        const slides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            if (slides.length === 0) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        if (slides.length > 0) {
+            setInterval(nextSlide, 4500);
+        }
+
+        /* -------------------------------------------------------------
+           2. MODAL LIGHTBOX
+        ------------------------------------------------------------- */
+        function openLightbox(url) {
+            const modal = document.getElementById('lightboxModal');
+            const img = document.getElementById('lightboxImg');
+            img.src = url;
+            modal.classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.add('hidden');
+        }
+
+        /* -------------------------------------------------------------
+           3. CANVAS LINTERNAS FLOTANTES (RAPUNZEL)
+        ------------------------------------------------------------- */
+        const canvas = document.getElementById('lanternsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Lantern {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 80;
+                this.speedY = 0.3 + Math.random() * 0.6;
+                this.size = 10 + Math.random() * 14;
+                this.opacity = 0.3 + Math.random() * 0.7;
+                this.pulseSpeed = 0.02 + Math.random() * 0.03;
+                this.pulse = Math.random() * Math.PI;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += Math.sin(this.pulse) * 0.3;
+                this.pulse += this.pulseSpeed;
+
+                if (this.y < -40) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity * (0.8 + Math.sin(this.pulse) * 0.2);
+                
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size * 1.6
+                );
+                gradient.addColorStop(0, 'rgba(255, 230, 150, 0.9)');
+                gradient.addColorStop(0.4, 'rgba(238, 150, 50, 0.5)');
+                gradient.addColorStop(1, 'rgba(238, 100, 20, 0)');
+
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 1.6, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffe082';
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(this.x - this.size/2, this.y - this.size/1.5, this.size, this.size * 1.2, 3);
+                } else {
+                    ctx.rect(this.x - this.size/2, this.y - this.size/1.5, this.size, this.size * 1.2);
+                }
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        const lanterns = Array.from({ length: 22 }, () => new Lantern());
+
+        function animateLanterns() {
+            ctx.clearRect(0, 0, width, height);
+            lanterns.forEach(l => {
+                l.update();
+                l.draw();
+            });
+            requestAnimationFrame(animateLanterns);
+        }
+        animateLanterns();
+
+        /* -------------------------------------------------------------
+           4. CONTADOR REGRESIVO (12 DICIEMBRE 2026, 7:00 PM)
+        ------------------------------------------------------------- */
+        const eventDate = new Date('December 12, 2026 19:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = "<div class='col-span-4 text-rapunzel-gold font-serifTitle'>¡El gran día ha llegado!</div>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        /* -------------------------------------------------------------
+           5. SINTETIZADOR DE MÚSICA MÁGICA (WEB AUDIO API)
+        ------------------------------------------------------------- */
+        let audioCtx = null;
+        let isPlaying = false;
+        let currentNoteIndex = 0;
+        let timerId = null;
+
+        const melody = [
+            { note: 523.25, duration: 400 },
+            { note: 587.33, duration: 400 },
+            { note: 659.25, duration: 600 },
+            { note: 783.99, duration: 800 },
+            { note: 659.25, duration: 400 },
+            { note: 587.33, duration: 400 },
+            { note: 523.25, duration: 800 },
+            { note: 440.00, duration: 400 },
+            { note: 523.25, duration: 400 },
+            { note: 659.25, duration: 800 },
+            { note: 587.33, duration: 1000 },
+        ];
+
+        function playNote(freq, duration) {
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration/1000));
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + (duration/1000));
+        }
+
+        function playMelodyLoop() {
+            if (!isPlaying) return;
+            const item = melody[currentNoteIndex];
+            playNote(item.note, item.duration);
+
+            currentNoteIndex = (currentNoteIndex + 1) % melody.length;
+            timerId = setTimeout(playMelodyLoop, item.duration + 50);
+        }
+
+        const musicBtn = document.getElementById('musicToggle');
+        const musicIcon = document.getElementById('musicIcon');
+
+        musicBtn.addEventListener('click', () => {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (isPlaying) {
+                isPlaying = false;
+                clearTimeout(timerId);
+                musicIcon.className = "fas fa-music text-xl";
+            } else {
+                isPlaying = true;
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                playMelodyLoop();
+                musicIcon.className = "fas fa-pause text-xl";
+            }
+        });
+    </script>
+</body>
+</html>
